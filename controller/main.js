@@ -7,10 +7,7 @@ export const setMoviesLest = (value) => {
 };
 
 export const getMovies = (req, res) => {
-  if (movies.length == 0) {
-    res.status(200).json("There is no movies");
-    return;
-  }
+
   res.status(200).json(movies);
 };
 
@@ -27,11 +24,11 @@ export const addMovie = (req, res) => {
   const movieId = uuid();
   if (Object.keys(movie).length != 3)
     return res
-      .status(404)
+      .status(400)
       .json("You have to enter only title, director and release_date");
   if (!movie.title || !movie.director || !movie.release_date)
     return res
-      .status(404)
+      .status(400)
       .json("Please enter title, director and release_date");
   movies.push({ id: movieId, ...movie });
   res.status(201).json(`Movie with id ${movieId} has been added`);
@@ -43,7 +40,8 @@ export const deleteMovie = (req, res) => {
   if (!foundMovie)
     return res.status(404).json(`There is no movie with this id ${id}`);
   movies = movies.filter((movie) => movie.id != id);
-  res.status(204).send("Movie deleted successfully");
+  res.status(204);
+  res.end();
 };
 
 export const updateMovie = (req, res) => {
@@ -54,5 +52,5 @@ export const updateMovie = (req, res) => {
   if (title) movie.title = title;
   if (director) movie.director = director;
   if (release_date) movie.release_date = release_date;
-  res.status(202).json(`user with id ${id} has been updated`);
+  res.status(200).json(`movie with id ${id} has been updated`);
 };
